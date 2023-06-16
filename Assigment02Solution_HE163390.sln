@@ -3,7 +3,37 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33801.468
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessObject", "BusinessObject\BusinessObject.csproj", "{98A46469-056F-4C6F-8A48-D61BBE1E104F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{DF14BEF2-0B06-44F8-8EBB-10157B06C8FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eBookStoreWebAPI", "eBookStoreWebAPI\eBookStoreWebAPI.csproj", "{BC19A382-5048-4093-8AA9-D5092288C27D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eBookStore", "eBookStore\eBookStore.csproj", "{02002E5C-2528-4058-8D58-5D5CC0FCF19F}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{98A46469-056F-4C6F-8A48-D61BBE1E104F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98A46469-056F-4C6F-8A48-D61BBE1E104F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98A46469-056F-4C6F-8A48-D61BBE1E104F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98A46469-056F-4C6F-8A48-D61BBE1E104F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF14BEF2-0B06-44F8-8EBB-10157B06C8FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF14BEF2-0B06-44F8-8EBB-10157B06C8FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF14BEF2-0B06-44F8-8EBB-10157B06C8FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF14BEF2-0B06-44F8-8EBB-10157B06C8FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC19A382-5048-4093-8AA9-D5092288C27D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC19A382-5048-4093-8AA9-D5092288C27D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC19A382-5048-4093-8AA9-D5092288C27D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC19A382-5048-4093-8AA9-D5092288C27D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02002E5C-2528-4058-8D58-5D5CC0FCF19F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02002E5C-2528-4058-8D58-5D5CC0FCF19F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02002E5C-2528-4058-8D58-5D5CC0FCF19F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02002E5C-2528-4058-8D58-5D5CC0FCF19F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
