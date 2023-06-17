@@ -231,6 +231,15 @@ namespace DataAccess
                 throw new NullReferenceException();
             }
 
+            if (dbContext.Publishers.Count() == 0)
+            {
+                foreach (var publisher in GetPublishers())
+                {
+                    dbContext.Publishers.Add(publisher);
+                }
+                dbContext.SaveChanges();
+            }
+
             if (dbContext.Roles.Count() == 0)
             {
                 foreach (var role in GetRoles())
@@ -245,15 +254,6 @@ namespace DataAccess
                 foreach (var user in GetUsers())
                 {
                     dbContext.Users.Add(user);
-                }
-                dbContext.SaveChanges();
-            }
-
-            if (dbContext.Publishers.Count() == 0)
-            {
-                foreach (var publisher in GetPublishers())
-                {
-                    dbContext.Publishers.Add(publisher);
                 }
                 dbContext.SaveChanges();
             }

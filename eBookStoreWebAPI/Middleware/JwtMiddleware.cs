@@ -27,19 +27,19 @@ namespace EBookStoreWebAPI.Middleware
             _appSettings = appSettings.Value;
         }
 
-        public async Task Invoke(HttpContext context, IAuthenticationService authenticationService, ApplicationDbContext dbContext, IUserRepository userRepository)
+        public async Task Invoke(HttpContext context, ApplicationDbContext dbContext, IUserRepository userRepository)
         {
             string token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
             if (token != null)
             {
-                AttachUserToContext(context, authenticationService, dbContext, userRepository, token);
+                AttachUserToContext(context, dbContext, userRepository, token);
             }
 
             await _next(context);
         }
 
-        private void AttachUserToContext(HttpContext context, IAuthenticationService userService, ApplicationDbContext dbContext, IUserRepository userRepository, string token)
+        private void AttachUserToContext(HttpContext context, ApplicationDbContext dbContext, IUserRepository userRepository, string token)
         {
             try
             {

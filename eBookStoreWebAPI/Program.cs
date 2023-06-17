@@ -12,6 +12,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Configuration;
 using EBookStoreWebAPI.Helpers;
 using EBookStoreWebAPI.Middleware;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 static IEdmModel GetEdmModel()
@@ -29,7 +30,7 @@ static IEdmModel GetEdmModel()
 string? connectionString = builder.Configuration.GetConnectionString("EBookStoreDB");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlServer(connectionString!);
+    options.UseSqlServer(connectionString!, opt => opt.EnableRetryOnFailure());
 });
 builder.Services.AddTransient<ApplicationDbContext>();
 
@@ -38,7 +39,6 @@ builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IPublisherRepository, PublisherRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddControllers();
 builder.Services.AddControllers().AddOData(options =>
             options.Select().Filter().Count().OrderBy().Expand().SetMaxTop(100)
@@ -54,8 +54,32 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 builder.Services.Configure<DefaultAccount>(builder.Configuration.GetSection("DefaultAccount"));
-
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    try
+    {
+        var context = services.GetRequiredService<ApplicationDbContext>();
+
+        if (context.Database.IsSqlServer())
+        {
+            context.Database.Migrate();
+        }
+
+        DataSource.MigrateData(context);
+    }
+    catch (Exception ex)
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+
+        logger.LogError(ex, "An error occurred while migrating or seeding the database.");
+
+        throw;
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -1,6 +1,12 @@
-﻿using EBookStoreWebAPI.Models;
+﻿using DataAccess.Repositories.Interfaces;
+using DataAccess;
+using EBookStoreWebAPI.Helpers;
+using EBookStoreWebAPI.Models;
 using EBookStoreWebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using DataAccess.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace EBookStoreWebAPI.Controllers
 {
@@ -8,11 +14,14 @@ namespace EBookStoreWebAPI.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly IAuthenticationService _authenticationService;
+        private readonly AuthenticationService _authenticationService;
 
-        public AuthenticationController(IAuthenticationService authenticationService)
+        public AuthenticationController(ApplicationDbContext dbContext,
+            IUserRepository userRepository,
+            IOptions<AppSettings> appSettings,
+            IOptions<DefaultAccount> adminAccount)
         {
-            _authenticationService = authenticationService;
+            _authenticationService = new AuthenticationService(dbContext,userRepository,appSettings, adminAccount);
         }
 
         [HttpPost]

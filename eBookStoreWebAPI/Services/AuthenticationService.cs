@@ -12,7 +12,7 @@ using System.Text;
 
 namespace EBookStoreWebAPI.Services
 {
-    public class AuthenticationService : IAuthenticationService
+    public class AuthenticationService
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IUserRepository _userRepository;
