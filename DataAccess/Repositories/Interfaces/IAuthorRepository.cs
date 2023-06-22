@@ -1,14 +1,13 @@
-﻿using BusinessObject;
-using System.Collections.Generic;
+﻿using BusinessObject.DTOs;
 
 namespace DataAccess.Repositories.Interfaces
 {
     public interface IAuthorRepository
     {
-        void DeleteAuthor(ApplicationDbContext dbContext, Author author);
-        Author FindAuthorById(ApplicationDbContext dbContext, int id);
-        List<Author> GetAuthors(ApplicationDbContext dbContext);
-        void SaveAuthor(ApplicationDbContext dbContext, Author author);
-        void UpdateAuthor(ApplicationDbContext dbContext, Author author);
+        void DeleteAuthor(ApplicationDbContext dbContext, AuthorDTO author);
+        AuthorDTO FindAuthorById(ApplicationDbContext dbContext, int id);
+        List<AuthorDTO> GetAuthors(ApplicationDbContext dbContext);
+        void SaveAuthor(ApplicationDbContext dbContext, AuthorDTO author);
+        void UpdateAuthor(ApplicationDbContext dbContext, AuthorDTO author);
     }
 }

@@ -1,28 +1,26 @@
 using BusinessObject;
+using BusinessObject.DTOs;
+using BusinessObject.Profiles;
 using DataAccess;
-using DataAccess.Repositories.Interfaces;
 using DataAccess.Repositories;
-using Microsoft.AspNetCore.Authentication;
+using DataAccess.Repositories.Interfaces;
+using EBookStoreWebAPI.Helpers;
+using EBookStoreWebAPI.Middleware;
+using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
-using System;
-using Microsoft.AspNetCore.OData;
 using Microsoft.OpenApi.Models;
-using Microsoft.Extensions.Configuration;
-using EBookStoreWebAPI.Helpers;
-using EBookStoreWebAPI.Middleware;
-using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 static IEdmModel GetEdmModel()
 {
     var builder = new ODataConventionModelBuilder();
-    builder.EntitySet<Author>("Authors");
-    builder.EntitySet<Book>("Books");
-    builder.EntitySet<Publisher>("Publishers");
-    builder.EntitySet<Role>("Roles");
-    builder.EntitySet<User>("Users");
+    builder.EntitySet<AuthorDTO>("Authors");
+    builder.EntitySet<BookDTO>("Books");
+    builder.EntitySet<PublisherDTO>("Publishers");
+    builder.EntitySet<RoleDTO>("Roles");
+    builder.EntitySet<UserDTO>("Users");
 
     return builder.GetEdmModel();
 }
@@ -42,7 +40,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddControllers();
 builder.Services.AddControllers().AddOData(options =>
             options.Select().Filter().Count().OrderBy().Expand().SetMaxTop(100)
-                .AddRouteComponents("Odata", GetEdmModel()));
+                .AddRouteComponents("odata", GetEdmModel()));
 
 builder.Services.AddCors();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -51,6 +49,8 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "EBookStoreWebAPI", Version = "v1" });
 });
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddAutoMapper(typeof(ModelProfile).Assembly);
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 builder.Services.Configure<DefaultAccount>(builder.Configuration.GetSection("DefaultAccount"));

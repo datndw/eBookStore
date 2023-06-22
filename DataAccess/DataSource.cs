@@ -23,7 +23,7 @@ namespace DataAccess
                     {
                         EmailAddress = "datndhe163390@fpt.edu.vn",
                         Password = "123",
-                        Source = null,
+                        Source = "",
                         FirstName = "Dat",
                         MiddleName = null,
                         LastName = "Nguyen",
@@ -35,7 +35,7 @@ namespace DataAccess
                     {
                         EmailAddress = "datnd27@fpt.com",
                         Password = "123",
-                        Source = null,
+                        Source = "",
                         FirstName = "Dat",
                         MiddleName = null,
                         LastName = "Nguyen",

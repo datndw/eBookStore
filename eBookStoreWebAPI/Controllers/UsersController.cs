@@ -1,4 +1,6 @@
-﻿using BusinessObject;
+﻿using AutoMapper;
+using BusinessObject;
+using BusinessObject.DTOs;
 using DataAccess;
 using DataAccess.Repositories.Interfaces;
 using EBookStoreWebAPI.Filters;
@@ -11,7 +13,6 @@ namespace EBookStoreWebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class UsersController : ODataController
     {
         private readonly ApplicationDbContext _dbContext;
@@ -31,30 +32,30 @@ namespace EBookStoreWebAPI.Controllers
             return Ok(_userRepository.GetUsers(_dbContext));
         }
 
+        [Authorize]
         [EnableQuery]
         [HttpGet("{key:int}")]
-        public IActionResult Get([FromODataUri] int key, string version)
+        public IActionResult Get([FromODataUri] int key)
         {
             return Ok(_userRepository.FindUserById(_dbContext, key));
         }
 
-        [Authorize("Admin")]
         [EnableQuery]
         [HttpPost]
-        public IActionResult Post([FromBody] User user)
+        public IActionResult Post([FromBody] UserForm user)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
             _userRepository.SaveUser(_dbContext, user);
-            return Created(user);
+            return Ok("User created!");
         }
 
         [Authorize]
         [EnableQuery]
         [HttpPut("{key:int}")]
-        public IActionResult Put([FromODataUri] int key, [FromBody] User user)
+        public IActionResult Put([FromODataUri] int key, [FromBody] UserDTO user)
         {
             var existedUser = _userRepository.FindUserById(_dbContext, key);
             if (existedUser == null)
@@ -63,7 +64,7 @@ namespace EBookStoreWebAPI.Controllers
             }
 
             _userRepository.UpdateUser(_dbContext, user);
-            return Ok();
+            return Ok("User updated!");
         }
 
         [Authorize("Admin")]
@@ -77,7 +78,7 @@ namespace EBookStoreWebAPI.Controllers
                 return NotFound();
             }
             _userRepository.DeleteUser(_dbContext, user);
-            return Ok();
+            return Ok("User deleted!");
         }
     }
 }

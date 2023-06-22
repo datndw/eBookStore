@@ -1,4 +1,5 @@
 ﻿using BusinessObject;
+using BusinessObject.DTOs;
 using DataAccess;
 using DataAccess.Repositories.Interfaces;
 using EBookStoreWebAPI.Filters;
@@ -33,14 +34,14 @@ namespace EBookStoreWebAPI.Controllers
 
         [EnableQuery]
         [HttpGet("{key:int}")]
-        public IActionResult Get([FromODataUri] int key, string version)
+        public IActionResult Get([FromODataUri] int key)
         {
             return Ok(_bookRepository.FindBookById(_dbContext, key));
         }
 
         [EnableQuery]
         [HttpPost]
-        public IActionResult Post([FromBody] Book book)
+        public IActionResult Post([FromBody] BookDTO book)
         {
             if (!ModelState.IsValid)
             {
@@ -52,7 +53,7 @@ namespace EBookStoreWebAPI.Controllers
 
         [EnableQuery]
         [HttpPut("{key:int}")]
-        public IActionResult Put([FromODataUri] int key, [FromBody] Book book)
+        public IActionResult Put([FromODataUri] int key, [FromBody] BookDTO book)
         {
             var existedBook = _bookRepository.FindBookById(_dbContext, key);
             if (existedBook == null)

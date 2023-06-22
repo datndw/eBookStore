@@ -1,4 +1,5 @@
 ﻿using BusinessObject;
+using BusinessObject.DTOs;
 using DataAccess;
 using DataAccess.Repositories.Interfaces;
 using EBookStoreWebAPI.Helpers;
@@ -33,16 +34,16 @@ namespace EBookStoreWebAPI.Services
 
         public AuthenticateResponse Authenticate(AuthenticateRequest model)
         {
-            User user;
+            Credential user;
 
             if (model.EmailAddress.Equals(_adminAccount.EmailAddress) && model.Password.Equals(_adminAccount.Password))
             {
-                user = new User()
+                user = new Credential()
                 {
                     Id = 0,
                     EmailAddress = _adminAccount.EmailAddress,
                     Password = _adminAccount.Password,
-                    Role = new Role() { Id = 1, Desc = "Admin" }
+                    Role = "Admin"
                 };
             }
             else
@@ -60,14 +61,14 @@ namespace EBookStoreWebAPI.Services
             return new AuthenticateResponse(user, token);
         }
 
-        private string GenerateJwtToken(User user)
+        private string GenerateJwtToken(Credential user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             byte[] key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()),
-                    new Claim("role", user.Role.Desc),
+                    new Claim("role", user.Role),
                     new Claim("email", user.EmailAddress) }),
                 Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

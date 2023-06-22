@@ -1,4 +1,5 @@
 ﻿using BusinessObject;
+using BusinessObject.DTOs;
 
 namespace EBookStoreWebAPI.Models
 {
@@ -6,7 +7,7 @@ namespace EBookStoreWebAPI.Models
     {
         public int Id { get; set; }
         public string EmailAddress { get; set; }
-        public Role Role { get; set; }
+        public string Role { get; set; }
         public string Token { get; set; }
 
         public AuthenticateResponse()
@@ -14,7 +15,7 @@ namespace EBookStoreWebAPI.Models
 
         }
 
-        public AuthenticateResponse(User user, string token)
+        public AuthenticateResponse(Credential user, string token)
         {
             Id = user.Id;
             Role = user.Role;
