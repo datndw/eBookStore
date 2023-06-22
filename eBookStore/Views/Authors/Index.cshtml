@@ -12,6 +12,20 @@
       @ViewBag.Error
     </div>
 }
+
+<div class="input-group">
+    <form asp-action="Index">
+        <div class="form-inline mb-4 row">
+            <div class="col-sm-6">
+                <input name="searchValue" placeholder="Search ..." class="form-control" id="datatable-search-input">
+            </div>
+            <div class="col-sm-6">
+                <button type="submit" class="btn btn-outline-primary">Search</button>
+            </div>
+        </div>
+    </form>
+</div>
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>

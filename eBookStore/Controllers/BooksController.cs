@@ -46,21 +46,25 @@ namespace eBookStore.Controllers
                 return RedirectToAction("Index", "Unauthorized");
             }
 
-
-            HttpResponseMessage respone = new();
+            HttpResponseMessage response = new();
             List<BookDTO> items = new();
             if (!string.IsNullOrWhiteSpace(searchValue))
             {
-                respone = double.TryParse(searchValue, out double value)
-                    ? await _client.GetAsync($"{BookApiUrl}?$filter=Price eq {value}")
-                    : await _client.GetAsync($"{BookApiUrl}?$filter=contains(Title, '{searchValue}'");
+                response = double.TryParse(searchValue, out double value)
+                    ? await _client.GetAsync($"{BookApiUrl}?$filter=Price eq {value} " +
+                    $"or Advance eq {value} " +
+                    $"or Royalty eq {value} " +
+                    $"or YtdSales eq {value}")
+                    : await _client.GetAsync($"{BookApiUrl}?$filter=contains(tolower(Title), tolower('{searchValue}')) " +
+                    $"or contains(tolower(Type), tolower('{searchValue}')) " +
+                    $"or contains(tolower(Notes), tolower('{searchValue}'))");
             }
             else
             {
-                respone = await _client.GetAsync($"{BookApiUrl}");
+                response = await _client.GetAsync($"{BookApiUrl}");
             }
 
-            string strData = await respone.Content.ReadAsStringAsync();
+            string strData = await response.Content.ReadAsStringAsync();
 
             dynamic temp = JObject.Parse(strData);
             if (((JArray)temp.value) != null)

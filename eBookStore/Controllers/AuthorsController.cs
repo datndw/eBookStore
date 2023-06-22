@@ -36,17 +36,33 @@ namespace eBookStore.Controllers
             return true;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchValue)
         {
             if (!SetUpHttpClient())
             {
                 return View("Unauthorized");
             }
 
+            HttpResponseMessage response = new();
             List<AuthorDTO> items = new();
 
-            var respone = await _client.GetAsync($"{AuthorApiUrl}");
-            string strData = await respone.Content.ReadAsStringAsync();
+            if (!string.IsNullOrWhiteSpace(searchValue))
+            {
+                response = double.TryParse(searchValue, out double value)
+                    ? await _client.GetAsync($"{AuthorApiUrl}?$filter=Zip eq {value} or ")
+                    : await _client.GetAsync($"{AuthorApiUrl}?$filter=contains(tolower(LastName), tolower('{searchValue}')) " +
+                    $"or contains(tolower(FirstName), tolower('{searchValue}')) " +
+                    $"or contains(tolower(Address), tolower('{searchValue}')) " +
+                    $"or contains(tolower(City), tolower('{searchValue}')) " +
+                    $"or contains(tolower(State), tolower('{searchValue}')) " +
+                    $"or contains(tolower(EmailAddress), tolower('{searchValue}')) " +
+                    $"or contains(tolower(Phone), tolower('{searchValue}'))");
+            }
+            else
+            {
+                response = await _client.GetAsync($"{AuthorApiUrl}");
+            }
+            string strData = await response.Content.ReadAsStringAsync();
 
             dynamic temp = JObject.Parse(strData);
             if ((JArray)temp.value != null)

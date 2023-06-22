@@ -15,13 +15,14 @@
             </div>
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
-                <input type="Password" asp-for="Password" class="form-control" />
+                <input id="pw" onkeyup="check()" type="Password" asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div>
                 <label class="control-label">Confirm Password</label>
-                <input required type="Password" class="form-control"/>
+                <input id="cpw" onkeyup="check()" required type="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
+                <span id="message"></span>
 
             </div>
             <div class="form-group">
@@ -44,13 +45,13 @@
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
+            <br/>
             <div class="form-group">
-                <input type="submit" value="Register" class="btn btn-primary" />
+                <input id="submit" type="submit" value="Register" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
-
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

@@ -41,16 +41,28 @@ namespace eBookStore.Controllers
 
             return true;
         }
-
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchValue)
         {
             if (!SetUpHttpClient())
             {
                 return View("Unauthorized");
             }
-
-            var respone = await _client.GetAsync($"{UserApiUrl}");
-            string strData = await respone.Content.ReadAsStringAsync();
+            HttpResponseMessage response = new();
+            if (!string.IsNullOrWhiteSpace(searchValue))
+            {
+                response = await _client.GetAsync($"{UserApiUrl}?$filter=contains(tolower(EmailAddress), tolower('{searchValue}')) " +
+                    $"or contains(tolower(Source), tolower('{searchValue}')) " +
+                    $"or contains(tolower(MiddleName), tolower('{searchValue}')) " +
+                    $"or contains(tolower(LastName), tolower('{searchValue}')) " +
+                    $"or contains(tolower(RoleDesc), tolower('{searchValue}')) " +
+                    $"or contains(tolower(PublisherName), tolower('{searchValue}')) " +
+                    $"or contains(tolower(FirstName), tolower('{searchValue}'))");
+            }
+            else
+            {
+                response = await _client.GetAsync($"{UserApiUrl}");
+            }
+            string strData = await response.Content.ReadAsStringAsync();
 
             List<UserDTO> items = new();
 

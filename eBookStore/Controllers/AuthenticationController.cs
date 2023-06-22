@@ -69,7 +69,7 @@ namespace eBookStore.Controllers
                 var response = await _client.PostAsync($"{UserApiUrl}", data);
                 if (response.IsSuccessStatusCode)
                 {
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction("Index", "Home");
                 }
 
                 ViewBag.Error = await response.Content.ReadAsStringAsync();

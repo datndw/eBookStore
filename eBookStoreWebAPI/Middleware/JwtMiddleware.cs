@@ -1,4 +1,5 @@
 ﻿using BusinessObject;
+using BusinessObject.DTOs;
 using DataAccess;
 using DataAccess.Repositories.Interfaces;
 using EBookStoreWebAPI.Helpers;
@@ -61,11 +62,15 @@ namespace EBookStoreWebAPI.Middleware
                 // attach user to context on successful jwt validation
                 if (userId == 0 && email.Equals(_adminAccount.EmailAddress))
                 {
-                    context.Items["User"] = new User()
+                    context.Items["User"] = new UserDTO()
                     {
                         Id = 0,
+                        FirstName = "Admin",
+                        LastName = "Account",
                         RoleId = 1,
-                        Role = new Role() {Id = 1, Desc = "Admin" },
+                        RoleDesc = "Admin",
+                        PublisherId = 1,
+                        PublisherName = "",
                         EmailAddress = _adminAccount.EmailAddress,
                         Password = _adminAccount.Password
                     };

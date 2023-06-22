@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Mail;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -117,15 +118,17 @@ namespace eBookStore.Controllers
             {
                 Id = (int)temp["Id"],
                 EmailAddress = (string)temp["EmailAddress"],
+                Password = (string)temp["Password"],
                 Source = (string)temp["Source"],
                 FirstName = (string)temp["FirstName"],
                 MiddleName = (string)temp["MiddleName"],
                 LastName = (string)temp["LastName"],
+                RoleId = (int)temp["RoleId"],
                 RoleDesc = (string)temp["RoleDesc"],
+                PublisherId = (int)temp["PublisherId"],
                 PublisherName = (string)temp["PublisherName"],
                 HireDate = (DateTime?)temp["HireDate"]
             };
-
             if (user == null)
             {
                 return NotFound();
@@ -137,7 +140,7 @@ namespace eBookStore.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,EmailAddress,Source,FirstName,MiddleName,LastName,Role,Publisher,HireDate")] UserDTO user)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,EmailAddress,Password,Source,FirstName,MiddleName,LastName,RoleId,RoleDesc,PublisherId,PublisherDesc,HireDate")] UserDTO user)
         {
             if (SetUpHttpClient() == null)
             {
@@ -152,20 +155,24 @@ namespace eBookStore.Controllers
             {
                 return NotFound();
             }
-
+            ModelState.Remove("RoleDesc");
+            ModelState.Remove("PublisherName");
             if (ModelState.IsValid)
             {
                 string content = JsonSerializer.Serialize(new
                 {
                     Id = user.Id,
                     EmailAddress = user.EmailAddress,
+                    Password = user.Password,
                     Source = user.Source,
                     FirstName = user.FirstName,
                     MiddleName = user.MiddleName,
                     LastName = user.LastName,
-                    RoleDesc = user.RoleDesc,
-                    PublisherName = user.PublisherName,
-                    HireDate = user.HireDate
+                    RoleId = user.RoleId,
+                    RoleDesc = "",
+                    PublisherId = user.PublisherId,
+                    PublisherName = "",
+                    HireDate = DateTime.Parse(DateTime.Parse(user.HireDate.ToString()).ToString("yyyy-MM-dd'T'HH:mm:ss.fff'Z'"))
                 });
                 var data = new StringContent(content, Encoding.UTF8, "application/json");
 
